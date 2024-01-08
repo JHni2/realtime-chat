@@ -1,0 +1,53 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+    'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+}
+
+.layout-header {
+  display: flex;
+  align-items: center;
+  height: 64px;
+  padding: 0 50px;
+  line-height: 64px;
+  background: #001529;
+}
+
+.menu {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  padding: 0;
+}
+
+.menu-item {
+  list-style: none;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.login-container {
+  height: calc(100vh - 64px);
+}
+
+#horizontal_login {
+  height: 100%;
+  gap: 1.5rem;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+}
+
+.ant-form-item {
+  min-width: 300px;
+}
+
+.login-container .ant-form-item-control-input-content {
+  text-align: center;
+}
