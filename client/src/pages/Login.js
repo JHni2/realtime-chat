@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
+import { AuthContext } from '../context/AuthContext';
 const Login = () => {
   const [form] = Form.useForm();
   const [clientReady, setClientReady] = useState(false);
+  const { logoutUser, loginUser, loginError, loginInfo, updateLoginInfo, isLoginLoading } = useContext(AuthContext);
 
-  // To disable submit button at the beginning.
   useEffect(() => {
     setClientReady(true);
   }, []);
+
   const onFinish = (values) => {
     console.log('Finish:', values);
+    loginUser();
   };
+
   return (
     <div className="login-container">
       <Form form={form} name="horizontal_login" layout="inline" onFinish={onFinish}>
@@ -24,7 +28,11 @@ const Login = () => {
             },
           ]}
         >
-          <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+          <Input
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            placeholder="id"
+            onChange={(e) => updateLoginInfo({ ...loginInfo, id: e.target.value })}
+          />
         </Form.Item>
         <Form.Item
           name="password"
@@ -35,8 +43,14 @@ const Login = () => {
             },
           ]}
         >
-          <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="Password" />
+          <Input
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            type="password"
+            placeholder="Password"
+            onChange={(e) => updateLoginInfo({ ...loginInfo, password: e.target.value })}
+          />
         </Form.Item>
+        <span className="login-error-message">{loginError?.message}</span>
         <Form.Item shouldUpdate>
           {() => (
             <Button
