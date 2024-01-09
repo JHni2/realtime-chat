@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { ChatContext } from '../context/ChatContext';
 import UserChat from '../components/chat/UserChat';
 import { AuthContext } from '../context/AuthContext';
+import PotentialChats from '../components/chat/PotentialChats';
 
 const Chat = () => {
   const { user } = useContext(AuthContext);
@@ -9,6 +10,7 @@ const Chat = () => {
 
   return (
     <div>
+      <PotentialChats />
       {userChats?.length < 1 ? null : (
         <div>
           {isUserChatsLoading && <p>Loading chats...</p>}
