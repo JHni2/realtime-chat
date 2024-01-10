@@ -8,15 +8,16 @@ const PotentialChats = () => {
 
   return (
     <div>
+      <span>start chat</span>
       {potentialChats &&
         potentialChats.map((u, index) => {
           return (
             <div key={index} onClick={() => createChat(user._id, u._id)}>
               {u.name}
-              <span></span>
             </div>
           );
         })}
+      <hr />
     </div>
   );
 };
