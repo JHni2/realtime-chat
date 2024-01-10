@@ -21,23 +21,25 @@ export const ChatContextProvider = ({ children, user }) => {
   console.log(onlineUsers);
 
   useEffect(() => {
-    const newSocket = io('http://localhost:3000');
+    const newSocket = io('http://localhost:8080');
     setSocket(newSocket);
 
-    console.log(newSocket);
-
-    // return () => {
-    //   newSocket.disconnect();
-    // };
+    return () => {
+      newSocket.disconnect();
+    };
   }, [user]);
 
-  // useEffect(() => {
-  //   if (socket === null) return;
-  //   socket.emit('addNewUser', user?._id);
-  //   socket.on('getOnlineUsers', (res) => {
-  //     setOnlineUsers(res);
-  //   });
-  // }, [socket]);
+  useEffect(() => {
+    if (socket === null) return;
+    socket.emit('addNewUser', user?._id);
+    socket.on('getOnlineUsers', (res) => {
+      setOnlineUsers(res);
+    });
+
+    return () => {
+      socket.off('getOnlineUsers');
+    };
+  }, [socket]);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -160,6 +162,7 @@ export const ChatContextProvider = ({ children, user }) => {
         isMessagesLoading,
         messagesError,
         sendTextMessage,
+        onlineUsers,
       }}
     >
       {children}
