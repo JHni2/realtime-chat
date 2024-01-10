@@ -6,9 +6,9 @@ const UserChat = ({ chat, user }) => {
 
   return (
     <div>
-      <div>
+      <span>
         <img src={userAvatar} height={35} />
-      </div>
+      </span>
       <div>
         <div className="name">{recipientUser?.name}</div>
         <div className="text">Text Message</div>
