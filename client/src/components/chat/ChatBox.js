@@ -3,7 +3,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { ChatContext } from '../../context/ChatContext';
 import { useFetchRecipientUser } from '../../hooks/useFetchRecipient';
 import moment from 'moment';
-import sendIcon from '../../assets/sendIcon.svg';
+// import sendIcon from '../../assets/sendIcon.svg';
 
 const ChatBox = () => {
   const { user } = useContext(AuthContext);
@@ -45,7 +45,7 @@ const ChatBox = () => {
       <div className="chat-input">
         <input value={textMessage} onChange={(e) => setTextMessage(e.target.value)} onKeyDown={(e) => pressEnter(e)} />
         <span className="sned-btn" onClick={handleSendTextMessage}>
-          <img src={sendIcon} height={20} />
+          {/* <img src={sendIcon} height={20} /> */}
         </span>
       </div>
     </div>
