@@ -17,10 +17,11 @@ const makeDir = () => {
   }
 };
 
-const writeToLog = (chatId, senderId, text, createdAt) => {
+const writeToLog = (chatId, senderId, content, contentType, createdAt) => {
   const jsonData = {
     senderId: senderId,
-    text: text,
+    contentType: contentType,
+    content: content,
     createdAt: createdAt,
   };
 

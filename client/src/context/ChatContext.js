@@ -14,11 +14,10 @@ export const ChatContextProvider = ({ children, user }) => {
   const [isMessagesLoading, setIsMessagesLoading] = useState(false);
   const [messagesError, setMessagesError] = useState(null);
   const [sendTextMessageError, setSendTextMessageError] = useState(null);
+  const [sendImageMessageError, setSendImageMessageError] = useState(null);
   const [newMessage, setNewMessage] = useState(null);
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
-
-  console.log(onlineUsers);
 
   useEffect(() => {
     const newSocket = io('http://localhost:8080');
@@ -115,7 +114,8 @@ export const ChatContextProvider = ({ children, user }) => {
       JSON.stringify({
         chatId: currentChatId,
         senderId: sender._id,
-        text: textMessage,
+        content: textMessage,
+        contentType: 'text',
       })
     );
 
@@ -126,6 +126,28 @@ export const ChatContextProvider = ({ children, user }) => {
     setNewMessage(response);
     setMessages((prev) => [...prev, response]);
     setTextMessage('');
+  }, []);
+
+  const sendImageMessage = useCallback(async (imageMessage, sender, currentChatId, setImageMessage) => {
+    if (!imageMessage) return;
+
+    const response = await postRequest(
+      `${baseUrl}/messages`,
+      JSON.stringify({
+        chatId: currentChatId,
+        senderId: sender._id,
+        content: imageMessage,
+        contentType: 'image',
+      })
+    );
+
+    if (response.error) {
+      return setSendImageMessageError(response);
+    }
+
+    setNewMessage(response);
+    setMessages((prev) => [...prev, response]);
+    setImageMessage('');
   }, []);
 
   const updateCurrentChat = useCallback((chat) => {
@@ -162,6 +184,7 @@ export const ChatContextProvider = ({ children, user }) => {
         isMessagesLoading,
         messagesError,
         sendTextMessage,
+        sendImageMessage,
         onlineUsers,
       }}
     >

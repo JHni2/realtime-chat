@@ -3,6 +3,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { ChatContext } from '../../context/ChatContext';
 import { useFetchRecipientUser } from '../../hooks/useFetchRecipient';
 import moment from 'moment';
+import ImageUpload from '../../utils/imageUpload';
 // import sendIcon from '../../assets/sendIcon.svg';
 
 const ChatBox = () => {
@@ -26,6 +27,8 @@ const ChatBox = () => {
     }
   };
 
+  console.log(messages);
+
   return (
     <div>
       <div className="chat-header">
@@ -36,7 +39,7 @@ const ChatBox = () => {
           messages.map((message, index) => {
             return (
               <div key={index} className={message?.senderId === user?._id ? 'message-self' : 'message-other'}>
-                <span>{message.text}</span>
+                {message.contentType === 'text' ? <span>{message.content}</span> : <img src={message.content} />}
                 <span className="message-footer">{moment(message.createdAt).calendar()}</span>
               </div>
             );
@@ -44,6 +47,7 @@ const ChatBox = () => {
       </div>
       <div className="chat-input">
         <input value={textMessage} onChange={(e) => setTextMessage(e.target.value)} onKeyDown={(e) => pressEnter(e)} />
+        <ImageUpload />
         <span className="sned-btn" onClick={handleSendTextMessage}>
           {/* <img src={sendIcon} height={20} /> */}
         </span>

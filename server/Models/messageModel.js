@@ -4,7 +4,15 @@ const messageSchema = new mongoose.Schema(
   {
     chatId: String,
     senderId: String,
-    text: String,
+    content: {
+      type: String,
+      required: true,
+    },
+    contentType: {
+      type: String,
+      enum: ['text', 'image'],
+      required: true,
+    },
   },
   {
     timestamps: true,
