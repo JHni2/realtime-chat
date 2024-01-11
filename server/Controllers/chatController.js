@@ -1,3 +1,4 @@
+const { makeDir } = require('../log/makeLog');
 const chatModel = require('../Models/chatModel');
 
 const createChat = async (req, res) => {
@@ -15,6 +16,7 @@ const createChat = async (req, res) => {
     });
 
     const response = await newChat.save();
+    makeDir();
 
     res.status(200).json(response);
   } catch (error) {

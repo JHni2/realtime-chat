@@ -35,7 +35,7 @@ const ChatBox = () => {
         {messages &&
           messages.map((message, index) => {
             return (
-              <div key={index} className={message?.senderId === user?.id ? 'message-self' : 'message-other'}>
+              <div key={index} className={message?.senderId === user?._id ? 'message-self' : 'message-other'}>
                 <span>{message.text}</span>
                 <span className="message-footer">{moment(message.createdAt).calendar()}</span>
               </div>

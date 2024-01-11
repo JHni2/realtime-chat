@@ -1,3 +1,4 @@
+const { writeToLog } = require('../log/makeLog');
 const messageModel = require('../Models/messageModel');
 
 const createMessage = async (req, res) => {
@@ -11,6 +12,8 @@ const createMessage = async (req, res) => {
 
   try {
     const response = await message.save();
+    writeToLog(response.chatId, senderId, text, response.createdAt);
+
     res.status(200).json(response);
   } catch (error) {
     console.log(error);
