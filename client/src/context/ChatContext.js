@@ -128,8 +128,10 @@ export const ChatContextProvider = ({ children, user }) => {
     setTextMessage('');
   }, []);
 
-  const sendImageMessage = useCallback(async (imageMessage, sender, currentChatId, setImageMessage) => {
+  const sendImageMessage = useCallback(async (imageMessage, sender, currentChatId, setImageMessage, imageName) => {
     if (!imageMessage) return;
+
+    console.log(imageName);
 
     const response = await postRequest(
       `${baseUrl}/messages`,
@@ -138,6 +140,7 @@ export const ChatContextProvider = ({ children, user }) => {
         senderId: sender._id,
         content: imageMessage,
         contentType: 'image',
+        imageName: imageName,
       })
     );
 

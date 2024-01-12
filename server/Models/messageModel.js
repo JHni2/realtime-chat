@@ -8,6 +8,7 @@ const messageSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    imageName: String,
     contentType: {
       type: String,
       enum: ['text', 'image'],

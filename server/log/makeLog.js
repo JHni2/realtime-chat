@@ -18,6 +18,8 @@ const makeDir = () => {
 };
 
 const writeToLog = (chatId, senderId, content, contentType, createdAt) => {
+  makeDir();
+
   const jsonData = {
     senderId: senderId,
     contentType: contentType,

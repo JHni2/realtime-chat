@@ -2,14 +2,22 @@ const { writeToLog } = require('../log/makeLog');
 const messageModel = require('../Models/messageModel');
 
 const createMessage = async (req, res) => {
-  const { chatId, senderId, content, contentType } = req.body;
+  const { chatId, senderId, content, contentType, imageName } = req.body;
 
-  const message = new messageModel({
+  const messageObject = {
     chatId,
     senderId,
     content,
     contentType,
-  });
+  };
+
+  if (contentType === 'image' && imageName) {
+    messageObject.imageName = imageName;
+  }
+
+  const message = new messageModel(messageObject);
+
+  console.log(message);
 
   try {
     const response = await message.save();

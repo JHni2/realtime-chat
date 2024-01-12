@@ -4,6 +4,7 @@ import { ChatContext } from '../../context/ChatContext';
 import { useFetchRecipientUser } from '../../hooks/useFetchRecipient';
 import moment from 'moment';
 import ImageUpload from '../../utils/imageUpload';
+import { downloadImage } from '../../utils/imageDownload';
 // import sendIcon from '../../assets/sendIcon.svg';
 
 const ChatBox = () => {
@@ -39,7 +40,16 @@ const ChatBox = () => {
           messages.map((message, index) => {
             return (
               <div key={index} className={message?.senderId === user?._id ? 'message-self' : 'message-other'}>
-                {message.contentType === 'text' ? <span>{message.content}</span> : <img src={message.content} />}
+                {message.contentType === 'text' ? (
+                  <span>{message.content}</span>
+                ) : (
+                  <div>
+                    <img src={message.content} />
+                    <span className="downnload-image-btn" onClick={() => downloadImage(message)}>
+                      다운로드
+                    </span>
+                  </div>
+                )}
                 <span className="message-footer">{moment(message.createdAt).calendar()}</span>
               </div>
             );
