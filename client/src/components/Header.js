@@ -6,13 +6,12 @@ const HeaderNav = () => {
   const { user, logoutUser } = useContext(AuthContext);
 
   return (
-    <header className="layout-header">
-      <ul className="menu">
+    <div className="header">
+      <div className="menu">
         <Link to="/">
           <li className="menu-item">Home</li>
         </Link>
-        <div className="menu-item-flex">
-          {user && <li className="menu-item">{user?.name} 님</li>}
+        <div>
           {user ? (
             <Link onClick={() => logoutUser()} to="/login">
               <li className="menu-item">Logout</li>
@@ -23,8 +22,8 @@ const HeaderNav = () => {
             </Link>
           )}
         </div>
-      </ul>
-    </header>
+      </div>
+    </div>
   );
 };
 export default HeaderNav;

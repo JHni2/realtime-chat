@@ -14,7 +14,7 @@ function App() {
   useEffect(() => {
     const originalConsole = console.log;
 
-    if (isShowConsole || isShowConsole === null) {
+    if (!isShowConsole || isShowConsole === null) {
       console.log = function () {};
     }
 
@@ -25,12 +25,16 @@ function App() {
 
   return (
     <ChatContextProvider user={user}>
-      <HeaderNav />
-      <Routes>
-        <Route path="/" element={user ? <Chat /> : <Login />} />
-        <Route path="login" element={user ? <Chat /> : <Login />} />
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
+      <div className="wrap">
+        <HeaderNav />
+        <div className="container">
+          <Routes>
+            <Route path="/" element={user ? <Chat /> : <Login />} />
+            <Route path="login" element={user ? <Chat /> : <Login />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Routes>
+        </div>
+      </div>
     </ChatContextProvider>
   );
 }

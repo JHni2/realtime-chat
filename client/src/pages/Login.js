@@ -2,6 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
 import { AuthContext } from '../context/AuthContext';
+import boyImg from '../assets/home-boy.png';
+import girlImg from '../assets/home-girl.png';
+
 const Login = () => {
   const [form] = Form.useForm();
   const [clientReady, setClientReady] = useState(false);
@@ -18,7 +21,15 @@ const Login = () => {
 
   return (
     <div className="login-container">
+      <div>
+        <img className="home-boy" src={boyImg} alt="home-boy" width={254} height={472} />
+        <img className="home-girl" src={girlImg} alt="home-girl" width={244} height={462} />
+      </div>
       <Form form={form} name="horizontal_login" layout="inline" onFinish={onFinish}>
+        <div className="login-text">
+          <span className="login-des">Welcome to Chat</span>
+          <span className="login-title">Log in</span>
+        </div>
         <Form.Item
           name="id"
           rules={[

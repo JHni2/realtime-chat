@@ -5,7 +5,7 @@ import { useFetchRecipientUser } from '../../hooks/useFetchRecipient';
 import moment from 'moment';
 import ImageUpload from '../../utils/imageUpload';
 import { downloadImage } from '../../utils/imageDownload';
-// import sendIcon from '../../assets/sendIcon.svg';
+import Avatar from './Avatar';
 
 const ChatBox = () => {
   const { user } = useContext(AuthContext);
@@ -13,9 +13,19 @@ const ChatBox = () => {
   const { recipientUser } = useFetchRecipientUser(currentChat, user);
   const [textMessage, setTextMessage] = useState('');
 
-  if (!recipientUser) return <p>선택된 대화가 없습니다.</p>;
+  if (!recipientUser)
+    return (
+      <div className="chat-no-user">
+        <p>선택된 대화가 없습니다.</p>
+      </div>
+    );
 
-  if (isMessagesLoading) return <p>로딩중...</p>;
+  if (isMessagesLoading)
+    return (
+      <div className="chat-no-user">
+        <p>로딩중...</p>
+      </div>
+    );
 
   const handleSendTextMessage = () => {
     sendTextMessage(textMessage, user, currentChat._id, setTextMessage);
@@ -31,17 +41,31 @@ const ChatBox = () => {
   console.log(messages);
 
   return (
-    <div>
+    <div className="chat-content">
       <div className="chat-header">
         <span>{recipientUser?.name}</span>
       </div>
       <div className="messages">
         {messages &&
-          messages.map((message, index) => {
+          messages.map((message, index, array) => {
             return (
               <div key={index} className={message?.senderId === user?._id ? 'message-self' : 'message-other'}>
                 {message.contentType === 'text' ? (
-                  <span>{message.content}</span>
+                  <>
+                    {array[index - 1] &&
+                    array[index + 1] &&
+                    message.senderId === array[index + 1].senderId &&
+                    moment(message.createdAt).isSame(array[index - 1].createdAt, 'minute')
+                      ? null
+                      : message?.senderId !== user?._id && <Avatar userName={recipientUser?.name} size={60} />}
+                    <div>
+                      <span className="message-text">{message.content}</span>
+                      {array[index + 1] &&
+                      moment(message.createdAt).isSame(array[index + 1].createdAt, 'minute') ? null : (
+                        <p className="message-footer">{moment(message.createdAt).calendar()}</p>
+                      )}
+                    </div>
+                  </>
                 ) : (
                   <div>
                     <img src={message.content} />
@@ -50,17 +74,20 @@ const ChatBox = () => {
                     </span>
                   </div>
                 )}
-                <span className="message-footer">{moment(message.createdAt).calendar()}</span>
               </div>
             );
           })}
       </div>
       <div className="chat-input">
-        <input value={textMessage} onChange={(e) => setTextMessage(e.target.value)} onKeyDown={(e) => pressEnter(e)} />
-        <ImageUpload />
-        <span className="sned-btn" onClick={handleSendTextMessage}>
-          {/* <img src={sendIcon} height={20} /> */}
-        </span>
+        <div className="chat-input-bg">
+          <ImageUpload />
+          <input
+            className="chat-input-message"
+            value={textMessage}
+            onChange={(e) => setTextMessage(e.target.value)}
+            onKeyDown={(e) => pressEnter(e)}
+          />
+        </div>
       </div>
     </div>
   );

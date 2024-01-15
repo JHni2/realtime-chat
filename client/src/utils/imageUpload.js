@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react';
 import { ChatContext } from '.././context/ChatContext';
 import { AuthContext } from '.././context/AuthContext';
+import addBtn from '.././assets/addBtn.svg';
 
 const ImageUpload = () => {
   const { user } = useContext(AuthContext);
@@ -38,6 +39,9 @@ const ImageUpload = () => {
   return (
     <div>
       <input id="imageMessage" accept=".jpg,.png" type="file" onChange={converToBase64} />
+      <label htmlFor="imageMessage">
+        <img className="add-btn" src={addBtn} alt="add-btn" width={20} height={20} />
+      </label>
       {imageMessage && (
         <div>
           <img width={100} height={100} src={imageMessage} />
@@ -45,14 +49,12 @@ const ImageUpload = () => {
             <span className="delete-image-btn" onClick={deleteImage}>
               X
             </span>
+            <span className="upload-image-btn" onClick={uploadImage}>
+              업로드
+            </span>
           </div>
         </div>
       )}
-      <div>
-        <span className="upload-image-btn" onClick={uploadImage}>
-          업로드
-        </span>
-      </div>
     </div>
   );
 };
