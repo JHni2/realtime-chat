@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useRef } from 'react';
 import { ChatContext } from '.././context/ChatContext';
 import { AuthContext } from '.././context/AuthContext';
 import addBtn from '.././assets/addBtn.svg';
@@ -8,6 +8,7 @@ const ImageUpload = () => {
   const { currentChat, sendImageMessage } = useContext(ChatContext);
   const [imageMessage, setImageMessage] = useState('');
   const [imageMessageName, setImageMessageName] = useState('');
+  const imageInput = useRef();
 
   const converToBase64 = (e) => {
     const reader = new FileReader();
@@ -32,26 +33,30 @@ const ImageUpload = () => {
   };
 
   const deleteImage = () => {
-    document.getElementById('imageMessage').remove();
+    imageInput.current.value = '';
     setImageMessage('');
   };
 
   return (
     <div>
-      <input id="imageMessage" accept=".jpg,.png" type="file" onChange={converToBase64} />
+      <input ref={imageInput} id="imageMessage" accept=".jpg,.png" type="file" onChange={converToBase64} />
       <label htmlFor="imageMessage">
         <img className="add-btn" src={addBtn} alt="add-btn" width={20} height={20} />
       </label>
       {imageMessage && (
-        <div>
-          <img width={100} height={100} src={imageMessage} />
+        <div className="image-preview-container">
+          <img className="image-preview" src={imageMessage} alt={imageMessageName} />
           <div>
-            <span className="delete-image-btn" onClick={deleteImage}>
-              X
-            </span>
-            <span className="upload-image-btn" onClick={uploadImage}>
-              업로드
-            </span>
+            <div className="delete-image-btn-bg">
+              <span className="delete-image-btn" onClick={deleteImage}>
+                ✖
+              </span>
+            </div>
+            <div className="upload-image-btn-bg">
+              <span className="upload-image-btn" onClick={uploadImage}>
+                ✔
+              </span>
+            </div>
           </div>
         </div>
       )}

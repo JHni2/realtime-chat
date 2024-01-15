@@ -9,19 +9,19 @@ import { useFetchConsnole } from './hooks/useFetchConsnole';
 
 function App() {
   const { user } = useContext(AuthContext);
-  const { isShowConsole } = useFetchConsnole();
+  // const { isShowConsole } = useFetchConsnole();
 
-  useEffect(() => {
-    const originalConsole = console.log;
+  // useEffect(() => {
+  //   const originalConsole = console.log;
 
-    if (!isShowConsole || isShowConsole === null) {
-      console.log = function () {};
-    }
+  //   if (!isShowConsole || isShowConsole === null) {
+  //     console.log = function () {};
+  //   }
 
-    return () => {
-      console.log = originalConsole;
-    };
-  }, [isShowConsole]);
+  //   return () => {
+  //     console.log = originalConsole;
+  //   };
+  // }, [isShowConsole]);
 
   return (
     <ChatContextProvider user={user}>

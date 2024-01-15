@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useRef, useEffect } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { ChatContext } from '../../context/ChatContext';
 import { useFetchRecipientUser } from '../../hooks/useFetchRecipient';
@@ -12,6 +12,11 @@ const ChatBox = () => {
   const { currentChat, messages, isMessagesLoading, sendTextMessage } = useContext(ChatContext);
   const { recipientUser } = useFetchRecipientUser(currentChat, user);
   const [textMessage, setTextMessage] = useState('');
+  const scroll = useRef();
+
+  useEffect(() => {
+    scroll.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   if (!recipientUser)
     return (
@@ -49,26 +54,18 @@ const ChatBox = () => {
         {messages &&
           messages.map((message, index, array) => {
             return (
-              <div key={index} className={message?.senderId === user?._id ? 'message-self' : 'message-other'}>
+              <div ref={scroll} key={index} className={message?.senderId === user?._id ? 'message-self' : 'message-other'}>
                 {message.contentType === 'text' ? (
                   <>
-                    {array[index - 1] &&
-                    array[index + 1] &&
-                    message.senderId === array[index + 1].senderId &&
-                    moment(message.createdAt).isSame(array[index - 1].createdAt, 'minute')
-                      ? null
-                      : message?.senderId !== user?._id && <Avatar userName={recipientUser?.name} size={60} />}
+                    {array[index - 1] && array[index + 1] && message.senderId === array[index - 1].senderId && message.senderId === array[index + 1].senderId && moment(message.createdAt).isSame(array[index - 1].createdAt, 'minute') ? null : message?.senderId !== user?._id && <Avatar userName={recipientUser?.name} size={60} />}
                     <div>
                       <span className="message-text">{message.content}</span>
-                      {array[index + 1] &&
-                      moment(message.createdAt).isSame(array[index + 1].createdAt, 'minute') ? null : (
-                        <p className="message-footer">{moment(message.createdAt).calendar()}</p>
-                      )}
+                      {array[index + 1] && moment(message.createdAt).isSame(array[index + 1].createdAt, 'minute') ? null : <p className="message-footer">{moment(message.createdAt).calendar()}</p>}
                     </div>
                   </>
                 ) : (
                   <div>
-                    <img src={message.content} />
+                    <img src={message.content} alt={message.imageName} />
                     <span className="downnload-image-btn" onClick={() => downloadImage(message)}>
                       다운로드
                     </span>
@@ -81,12 +78,7 @@ const ChatBox = () => {
       <div className="chat-input">
         <div className="chat-input-bg">
           <ImageUpload />
-          <input
-            className="chat-input-message"
-            value={textMessage}
-            onChange={(e) => setTextMessage(e.target.value)}
-            onKeyDown={(e) => pressEnter(e)}
-          />
+          <input className="chat-input-message" value={textMessage} onChange={(e) => setTextMessage(e.target.value)} onKeyDown={(e) => pressEnter(e)} />
         </div>
       </div>
     </div>

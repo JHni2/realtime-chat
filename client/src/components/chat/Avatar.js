@@ -7,9 +7,9 @@ const Avatar = (props) => {
     <div className={isSelf ? 'avatar-container avatar-self' : 'avatar-container'}>
       <div className="avatar-img">
         <img src={userDefaultImg} alt={userName} width={size} height={size} />
-        {isOnline && <div className="avatar-online" />}
       </div>
       <span className="avatar-name">{userName}</span>
+      {isOnline && <div className="avatar-online" />}
     </div>
   );
 };

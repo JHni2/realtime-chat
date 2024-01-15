@@ -123,6 +123,7 @@ body {
 }
 
 .avatar-container {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -158,8 +159,9 @@ body {
 }
 
 .avatar-online {
-  position: relative;
-  right: 16px;
+  position: absolute;
+  top: 0px;
+  left: 30px;
   width: 20px;
   height: 20px;
   border-radius: 20px;
@@ -197,6 +199,7 @@ body {
 
 .chat-content {
   width: 100%;
+  height: calc(100vh - 70px);
 }
 
 .chat-header {
@@ -211,8 +214,8 @@ body {
 .messages {
   position: relative;
   top: -22px;
+  height: calc(100vh - 70px);
   padding: 0 2rem;
-  max-height: 1200px;
   overflow-y: auto;
   background: #fff;
 }
@@ -248,8 +251,12 @@ body {
   margin-bottom: 1rem;
 }
 
+.messages > div:first-child {
+  margin-top: 1rem;
+}
+
 .messages > div:last-child {
-  margin-bottom: 6rem;
+  margin-bottom: 8rem;
 }
 
 .chat-input {
@@ -291,3 +298,40 @@ body {
   cursor: pointer;
   padding-left: 1.5rem;
 }
+
+.image-preview-container{
+  position: absolute;
+  max-width: 500px;
+  bottom: 5rem;
+}
+
+.image-preview{
+  position: relative;
+  width: 100%;
+}
+
+.delete-image-btn-bg,
+.upload-image-btn-bg{
+  position: absolute;
+  top: -10px;
+  right: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  height: 25px;
+  border-radius: 20px;
+  background: rgb(223, 71, 71);
+  cursor: pointer;
+}
+
+.delete-image-btn,
+.upload-image-btn{
+  color: white;
+}
+
+.upload-image-btn-bg{
+  right:-10px;
+  background: rgb(89, 223, 71);
+}
+
