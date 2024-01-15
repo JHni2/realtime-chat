@@ -6,6 +6,7 @@ import moment from 'moment';
 import ImageUpload from '../../utils/imageUpload';
 import { downloadImage } from '../../utils/imageDownload';
 import Avatar from './Avatar';
+import downlaod from '../../assets/download.svg';
 
 const ChatBox = () => {
   const { user } = useContext(AuthContext);
@@ -64,10 +65,10 @@ const ChatBox = () => {
                     </div>
                   </>
                 ) : (
-                  <div>
-                    <img src={message.content} alt={message.imageName} />
+                  <div className="download-image-container">
+                    <img className="message-image" src={message.content} alt={message.imageName} />
                     <span className="downnload-image-btn" onClick={() => downloadImage(message)}>
-                      다운로드
+                      <img src={downlaod} alt="download-btn" width={25} />
                     </span>
                   </div>
                 )}
