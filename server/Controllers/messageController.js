@@ -17,8 +17,6 @@ const createMessage = async (req, res) => {
 
   const message = new messageModel(messageObject);
 
-  console.log(message);
-
   try {
     const response = await message.save();
     writeToLog(response.chatId, senderId, content, contentType, response.createdAt);

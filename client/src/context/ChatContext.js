@@ -131,8 +131,6 @@ export const ChatContextProvider = ({ children, user }) => {
   const sendImageMessage = useCallback(async (imageMessage, sender, currentChatId, setImageMessage, imageName) => {
     if (!imageMessage) return;
 
-    console.log(imageName);
-
     const response = await postRequest(
       `${baseUrl}/messages`,
       JSON.stringify({
