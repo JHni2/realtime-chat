@@ -18,6 +18,7 @@ export const AuthContextProvider = ({ children }) => {
     setUser(JSON.parse(user));
   }, []);
 
+  // login input onChange에 사용
   const updateLoginInfo = useCallback((info) => {
     setLoginInfo(info);
   }, []);

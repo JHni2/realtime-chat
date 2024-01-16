@@ -15,7 +15,7 @@ const Login = () => {
   }, []);
 
   const onFinish = (values) => {
-    console.log('Finish:', values);
+    console.log('로그인 사용자:', values);
     loginUser();
   };
 
@@ -35,7 +35,7 @@ const Login = () => {
           rules={[
             {
               required: true,
-              message: 'Please input your id!',
+              message: 'id를 입력해주세요.',
             },
           ]}
         >
@@ -50,7 +50,7 @@ const Login = () => {
           rules={[
             {
               required: true,
-              message: 'Please input your password!',
+              message: '비밀번호를 입력해주세요.',
             },
           ]}
         >

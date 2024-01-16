@@ -1,3 +1,4 @@
+// image 메시지의 url에서 데이터를 가져와 Data URL로 변환
 const convertToDataURL = (imageMessage) => {
   return fetch(imageMessage)
     .then((response) => {

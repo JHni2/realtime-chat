@@ -29,6 +29,7 @@ export const ChatContextProvider = ({ children, user }) => {
     };
   }, [user]);
 
+  // 로그인 시 동작
   useEffect(() => {
     if (socket === null) return;
     socket.emit('addNewUser', user?._id);
@@ -41,6 +42,7 @@ export const ChatContextProvider = ({ children, user }) => {
     };
   }, [socket]);
 
+  // 메시지 전송
   useEffect(() => {
     if (socket === null) return;
 
@@ -49,6 +51,7 @@ export const ChatContextProvider = ({ children, user }) => {
     socket.emit('sendMessage', { ...newMessage, recipientId });
   }, [newMessage]);
 
+  // 실시간으로 메시지 수신
   useEffect(() => {
     if (socket === null) return;
 
@@ -77,8 +80,9 @@ export const ChatContextProvider = ({ children, user }) => {
 
         if (user?._id === u._id) return false;
 
-        // 채팅방 존재 유무 확인
+        // 사용자의 채팅방 존재 유무 확인
         if (userChats) {
+          console.log(userChats);
           isChatCreated = userChats?.some((chat) => {
             return chat.members[0] === u._id || chat.members[1] === u._id;
           });
@@ -93,6 +97,7 @@ export const ChatContextProvider = ({ children, user }) => {
     getUsers();
   }, [userChats]);
 
+  // 사용자의 이미 생성된 채팅방 불러오기
   useEffect(() => {
     const getUserChats = async () => {
       if (user?._id) {
@@ -100,6 +105,7 @@ export const ChatContextProvider = ({ children, user }) => {
         setUserChatsError(null);
 
         const response = await getRequest(`${baseUrl}/chats/${user?._id}`);
+        console.log(response);
 
         setIsUserChatsLoading(false);
 
@@ -113,6 +119,7 @@ export const ChatContextProvider = ({ children, user }) => {
     getUserChats();
   }, [user]);
 
+  // 선택한 채팅방의 메시지 불러오기
   useEffect(() => {
     const getMessages = async () => {
       setIsMessagesLoading(true);
@@ -131,6 +138,7 @@ export const ChatContextProvider = ({ children, user }) => {
     getMessages();
   }, [currentChat]);
 
+  // text 메시지 전송하기
   const sendTextMessage = useCallback(async (textMessage, sender, currentChatId, setTextMessage) => {
     if (!textMessage) return;
 
@@ -153,6 +161,7 @@ export const ChatContextProvider = ({ children, user }) => {
     setTextMessage('');
   }, []);
 
+  // image 메시지 전송하기
   const sendImageMessage = useCallback(async (imageMessage, sender, currentChatId, setImageMessage, imageName) => {
     if (!imageMessage) return;
 
@@ -176,10 +185,12 @@ export const ChatContextProvider = ({ children, user }) => {
     setImageMessage('');
   }, []);
 
+  // 채팅방 선택하기
   const updateCurrentChat = useCallback((chat) => {
     setCurrentChat(chat);
   }, []);
 
+  // 채팅방 생성하기
   const createChat = useCallback(async (firstId, secondId) => {
     const response = await postRequest(
       `${baseUrl}/chats`,
@@ -190,7 +201,7 @@ export const ChatContextProvider = ({ children, user }) => {
     );
 
     if (response.error) {
-      return console.log('채팅을 만드는 데 실패했습니다.', response);
+      return console.log('채팅을 생성하는 데 실패했습니다.', response);
     }
 
     setUserChats((prev) => [...prev, response]);

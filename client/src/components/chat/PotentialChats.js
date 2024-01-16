@@ -13,9 +13,10 @@ const PotentialChats = () => {
       <div className="potential-users">
         {potentialChats &&
           potentialChats.map((u, index) => {
+            const isOnline = onlineUsers?.some((user) => user?.userId === u._id);
             return (
               <div key={index} onClick={() => createChat(user._id, u._id)}>
-                <Avatar userName={u.name} size={48} onlineUsers={onlineUsers} />
+                <Avatar userName={u.name} size={48} isOnline={isOnline} />
               </div>
             );
           })}
