@@ -20,6 +20,7 @@ export const ChatContextProvider = ({ children, user }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
 
   useEffect(() => {
+    // socketio 서버 접속
     const newSocket = io('http://localhost:8080');
     setSocket(newSocket);
 
@@ -62,6 +63,7 @@ export const ChatContextProvider = ({ children, user }) => {
     };
   }, [socket, currentChat]);
 
+  // 잠재적 채팅 상대 불러오기
   useEffect(() => {
     const getUsers = async () => {
       const response = await getRequest(`${baseUrl}/users`);
@@ -75,6 +77,7 @@ export const ChatContextProvider = ({ children, user }) => {
 
         if (user?._id === u._id) return false;
 
+        // 채팅방 존재 유무 확인
         if (userChats) {
           isChatCreated = userChats?.some((chat) => {
             return chat.members[0] === u._id || chat.members[1] === u._id;

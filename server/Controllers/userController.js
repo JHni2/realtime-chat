@@ -2,12 +2,14 @@ const userModel = require('../Models/userModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+// token 생성
 const createToken = (_id) => {
   const jwtkey = process.env.JWT_SECRET_KEY;
 
   return jwt.sign({ _id }, jwtkey, { expiresIn: '3d' });
 };
 
+// 사용자 등록
 const registerUser = async (req, res) => {
   try {
     const { name, id, password } = req.body;
@@ -33,6 +35,7 @@ const registerUser = async (req, res) => {
   }
 };
 
+// 사용자 로그인
 const loginUser = async (req, res) => {
   const { id, password } = req.body;
 
@@ -52,6 +55,7 @@ const loginUser = async (req, res) => {
   }
 };
 
+// 특정 사용자 찾기
 const findUser = async (req, res) => {
   const userId = req.params.userId;
 
@@ -65,6 +69,7 @@ const findUser = async (req, res) => {
   }
 };
 
+// 모든 사용자 찾기
 const getUsers = async (req, res) => {
   try {
     const users = await userModel.find();

@@ -1,6 +1,7 @@
 const { writeToLog } = require('../log/makeLog');
 const messageModel = require('../Models/messageModel');
 
+// 채팅 메시지 추가
 const createMessage = async (req, res) => {
   const { chatId, senderId, content, contentType, imageName } = req.body;
 
@@ -28,6 +29,7 @@ const createMessage = async (req, res) => {
   }
 };
 
+// 채팅 메시지 불러오기
 const getMessages = async (req, res) => {
   const { chatId } = req.params;
 

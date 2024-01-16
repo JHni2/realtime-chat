@@ -1,5 +1,6 @@
 const chatModel = require('../Models/chatModel');
 
+// 채팅방 생성
 const createChat = async (req, res) => {
   const { firstId, secondId } = req.body;
 
@@ -23,6 +24,7 @@ const createChat = async (req, res) => {
   }
 };
 
+// 사용자가 속한 채팅방 찾기
 const findUserChats = async (req, res) => {
   const userId = req.params.userId;
 
@@ -38,6 +40,7 @@ const findUserChats = async (req, res) => {
   }
 };
 
+// 채팅방 찾기
 const findChat = async (req, res) => {
   const { firstId, secondId } = req.params;
 

@@ -3,6 +3,7 @@ const io = new Server({ cors: 'http://localhost:3000' });
 
 let onlineUsers = [];
 
+// 클라이언트가 socketio 서버에 접속했을 때
 io.on('connection', (socket) => {
   console.log('user 연결', socket.id);
 

@@ -7,6 +7,7 @@ const month = ('0' + (date.getMonth() + 1)).slice(-2);
 const day = ('0' + date.getDate()).slice(-2);
 const currentDate = `${year}${month}${day}`;
 
+// 로그 폴더 생성
 const makeDir = () => {
   const absoluteFolderPath = path.resolve(__dirname, currentDate);
   if (!fs.existsSync(absoluteFolderPath)) {
@@ -17,6 +18,7 @@ const makeDir = () => {
   }
 };
 
+// 로그 작성
 const writeToLog = (chatId, senderId, content, contentType, createdAt) => {
   makeDir();
 

@@ -10,6 +10,8 @@ require('dotenv').config();
 
 app.use(express.json());
 app.use(cors());
+
+// 라우트 모듈 api 경로에 연결
 app.use('/api/users', userRoute);
 app.use('/api/chats', chatRoute);
 app.use('/api/messages', messageRoute);
