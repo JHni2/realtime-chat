@@ -7,17 +7,29 @@ import ImageUpload from '../../utils/imageUpload';
 import { downloadImage } from '../../utils/imageDownload';
 import Avatar from './Avatar';
 import downlaod from '../../assets/download.svg';
+import ImageModal from '../../components/ImageModal';
 
 const ChatBox = () => {
   const { user } = useContext(AuthContext);
   const { currentChat, messages, isMessagesLoading, sendTextMessage } = useContext(ChatContext);
   const { recipientUser } = useFetchRecipientUser(currentChat, user);
   const [textMessage, setTextMessage] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState('');
   const scroll = useRef();
 
   useEffect(() => {
     scroll.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  const handleImageClick = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
 
   if (!recipientUser)
     return (
@@ -55,18 +67,39 @@ const ChatBox = () => {
         {messages &&
           messages.map((message, index, array) => {
             return (
-              <div ref={scroll} key={index} className={message?.senderId === user?._id ? 'message-self' : 'message-other'}>
+              <div
+                ref={scroll}
+                key={index}
+                className={message?.senderId === user?._id ? 'message-self' : 'message-other'}
+              >
                 {message.contentType === 'text' ? (
                   <>
-                    {array[index - 1] && array[index + 1] && message.senderId === array[index - 1].senderId && message.senderId === array[index + 1].senderId && moment(message.createdAt).isSame(array[index - 1].createdAt, 'minute') ? null : message?.senderId !== user?._id && <Avatar userName={recipientUser?.name} size={60} />}
+                    {array[index - 1] &&
+                    array[index + 1] &&
+                    message.senderId === array[index - 1].senderId &&
+                    message.senderId === array[index + 1].senderId &&
+                    moment(message.createdAt).isSame(array[index - 1].createdAt, 'minute')
+                      ? null
+                      : message?.senderId !== user?._id && <Avatar userName={recipientUser?.name} size={60} />}
                     <div>
                       <span className="message-text">{message.content}</span>
-                      {array[index + 1] && moment(message.createdAt).isSame(array[index + 1].createdAt, 'minute') ? null : <p className="message-footer">{moment(message.createdAt).calendar()}</p>}
+                      {array[index + 1] &&
+                      moment(message.createdAt).isSame(array[index + 1].createdAt, 'minute') ? null : (
+                        <p className="message-footer">{moment(message.createdAt).calendar()}</p>
+                      )}
                     </div>
                   </>
                 ) : (
-                  <div className="download-image-container">
-                    <img className="message-image" src={message.content} alt={message.imageName} />
+                  <div className="image-container">
+                    <ImageModal imageUrl={selectedImage} open={modalOpen} onClose={handleCloseModal} />
+                    <span className="image-wrapper">
+                      <img
+                        onClick={(e) => handleImageClick(e.target.src)}
+                        className="message-image"
+                        src={message.content}
+                        alt={message.imageName}
+                      />
+                    </span>
                     <span className="downnload-image-btn" onClick={() => downloadImage(message)}>
                       <img src={downlaod} alt="download-btn" width={25} />
                     </span>
@@ -79,7 +112,12 @@ const ChatBox = () => {
       <div className="chat-input">
         <div className="chat-input-bg">
           <ImageUpload />
-          <input className="chat-input-message" value={textMessage} onChange={(e) => setTextMessage(e.target.value)} onKeyDown={(e) => pressEnter(e)} />
+          <input
+            className="chat-input-message"
+            value={textMessage}
+            onChange={(e) => setTextMessage(e.target.value)}
+            onKeyDown={(e) => pressEnter(e)}
+          />
         </div>
       </div>
     </div>

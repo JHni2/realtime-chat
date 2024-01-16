@@ -299,19 +299,22 @@ body {
   padding-left: 1.5rem;
 }
 
-.image-preview-container{
+.image-preview-container {
   position: absolute;
+  left: 0;
+  bottom: 90px;
   max-width: 500px;
-  bottom: 6rem;
+  padding: 1rem;
+  background: #fff;
 }
 
-.image-preview{
+.image-preview {
   position: relative;
   width: 100%;
 }
 
 .delete-image-btn-bg,
-.upload-image-btn-bg{
+.upload-image-btn-bg {
   position: absolute;
   top: -10px;
   right: 22px;
@@ -326,26 +329,32 @@ body {
 }
 
 .delete-image-btn,
-.upload-image-btn{
+.upload-image-btn {
   color: white;
 }
 
-.upload-image-btn-bg{
+.upload-image-btn-bg {
   right: -10px;
   background: rgb(89, 223, 71);
 }
 
-.download-image-container{
+.image-container {
   position: relative;
   display: flex;
   flex-direction: column;
-  cursor: pointer;
+}
+
+.image-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-left: auto;
 }
 
 .downnload-image-btn {
   position: absolute;
-  bottom: -10px;
-  right: -16px;
+  bottom: 0px;
+  right: -12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -354,8 +363,17 @@ body {
   width: 35px;
   height: 35px;
   box-shadow: 2px 1px 8px -1px #ababab;
+  cursor: pointer;
 }
 
-.message-image{
-  margin-left: auto;
+.message-image {
+  max-width: 600px;
+  margin: 1rem 0;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.ant-modal-close {
+  top: 2px !important;
+  right: 2px !important;
 }
