@@ -14,7 +14,7 @@ body {
   width: 1280px;
   height: 70px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   box-sizing: border-box;
   padding: 1rem 2rem;
@@ -36,21 +36,11 @@ body {
 
 .login-container {
   display: flex;
+  align-items: center;
+  justify-content: space-evenly;
   width: 100%;
   height: calc(100vh - 70px);
   background: #fff;
-}
-
-.home-boy {
-  position: relative;
-  top: 16rem;
-  left: 4rem;
-}
-
-.home-girl {
-  position: relative;
-  top: 30rem;
-  left: 6rem;
 }
 
 .login-title {
@@ -74,10 +64,18 @@ body {
   border: 1px solid #e4e4e4;
 }
 
-#horizontal_login {
+.home-girl {
   position: relative;
-  top: 16rem;
-  left: 16rem;
+  top: 2rem;
+}
+
+.home-boy {
+  position: relative;
+  bottom: 1rem;
+  right: 2rem;
+}
+
+#horizontal_login {
   width: 390px;
   height: 475px;
   border-radius: 99px;
@@ -152,6 +150,8 @@ body {
 
 .avatar-img {
   display: flex;
+  border-radius: 99px;
+  overflow: hidden;
 }
 
 .avatar-name {
@@ -339,17 +339,12 @@ body {
   background: rgb(89, 223, 71);
 }
 
-.image-container {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-
 .image-wrapper {
-  width: 100%;
+  display: inline-block;
+  position: relative;
 }
 
-.downnload-image-btn {
+.download-image-btn {
   position: absolute;
   bottom: 0px;
   right: -12px;

@@ -22,8 +22,8 @@ const Login = () => {
   return (
     <div className="login-container">
       <div>
-        <img className="home-boy" src={boyImg} alt="home-boy" width={254} height={472} />
-        <img className="home-girl" src={girlImg} alt="home-girl" width={244} height={462} />
+        <img className="home-boy" src={boyImg} alt="home-boy" width={214} height={422} />
+        <img className="home-girl" src={girlImg} alt="home-girl" width={194} height={402} />
       </div>
       <Form form={form} name="horizontal_login" layout="inline" onFinish={onFinish}>
         <div className="login-text">

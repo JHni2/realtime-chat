@@ -91,23 +91,21 @@ const ChatBox = () => {
                     </div>
                   </>
                 ) : (
-                  <div
-                    className={
-                      message?.senderId === user?._id ? 'message-self image-container' : 'message-other image-container'
-                    }
-                  >
+                  <div className={message?.senderId === user?._id ? 'message-self ' : 'message-other '}>
                     <ImageModal imageUrl={selectedImage} open={modalOpen} onClose={handleCloseModal} />
-                    <span className="image-wrapper">
-                      <img
-                        onClick={(e) => handleImageClick(e.target.src)}
-                        className="message-image"
-                        src={message.content}
-                        alt={message.imageName}
-                      />
-                    </span>
-                    <span className="downnload-image-btn" onClick={() => downloadImage(message)}>
-                      <img src={downlaod} alt="download-btn" width={25} />
-                    </span>
+                    <div className="image-container">
+                      <div className="image-wrapper">
+                        <img
+                          onClick={(e) => handleImageClick(e.target.src)}
+                          className="message-image"
+                          src={message.content}
+                          alt={message.imageName}
+                        />
+                        <span className="download-image-btn" onClick={() => downloadImage(message)}>
+                          <img src={downlaod} alt="download-btn" width={25} />
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
