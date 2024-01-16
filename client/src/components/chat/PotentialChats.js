@@ -9,15 +9,17 @@ const PotentialChats = () => {
 
   return (
     <>
-      {potentialChats.length !== 0 && <span className="potential-title">Start Chat</span>}
-      {potentialChats &&
-        potentialChats.map((u, index) => {
-          return (
-            <div key={index} onClick={() => createChat(user._id, u._id)}>
-              <Avatar userName={u.name} size={48} onlineUsers={onlineUsers} />
-            </div>
-          );
-        })}
+      {potentialChats.length !== 0 && <p className="potential-title">Start Chat</p>}
+      <div className="potential-users">
+        {potentialChats &&
+          potentialChats.map((u, index) => {
+            return (
+              <div key={index} onClick={() => createChat(user._id, u._id)}>
+                <Avatar userName={u.name} size={48} onlineUsers={onlineUsers} />
+              </div>
+            );
+          })}
+      </div>
     </>
   );
 };

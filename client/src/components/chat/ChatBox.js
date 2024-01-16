@@ -84,13 +84,18 @@ const ChatBox = () => {
                     <div>
                       <span className="message-text">{message.content}</span>
                       {array[index + 1] &&
+                      message.senderId === array[index + 1].senderId &&
                       moment(message.createdAt).isSame(array[index + 1].createdAt, 'minute') ? null : (
                         <p className="message-footer">{moment(message.createdAt).calendar()}</p>
                       )}
                     </div>
                   </>
                 ) : (
-                  <div className="image-container">
+                  <div
+                    className={
+                      message?.senderId === user?._id ? 'message-self image-container' : 'message-other image-container'
+                    }
+                  >
                     <ImageModal imageUrl={selectedImage} open={modalOpen} onClose={handleCloseModal} />
                     <span className="image-wrapper">
                       <img

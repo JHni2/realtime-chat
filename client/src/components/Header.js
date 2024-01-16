@@ -8,17 +8,15 @@ const HeaderNav = () => {
   return (
     <div className="header">
       <div className="menu">
-        <Link to="/">
-          <li className="menu-item">Home</li>
-        </Link>
+        <div className="menu-item">Home</div>
         <div>
           {user ? (
             <Link onClick={() => logoutUser()} to="/login">
-              <li className="menu-item">Logout</li>
+              <div className="menu-item">Logout</div>
             </Link>
           ) : (
             <Link to="/chat">
-              <li className="menu-item">Login</li>
+              <div className="menu-item">Login</div>
             </Link>
           )}
         </div>

@@ -116,8 +116,9 @@ body {
 .chat-sidebar {
   min-width: 300px;
   height: calc(100vh - 70px);
-  padding-left: 1.5rem;
+  padding: 1.5rem 0 0 1.5rem;
   background-color: #fbfbfb;
+  box-sizing: border-box;
   box-shadow: 4px 4px 6px -4px rgba(0, 0, 0, 0.25);
   z-index: 10;
 }
@@ -146,7 +147,7 @@ body {
 .avatar-self:hover {
   color: #000;
   transition: none;
-  cursor: default;
+  cursor: text !important;
 }
 
 .avatar-img {
@@ -186,7 +187,7 @@ body {
 .potential-title {
   font-size: 16px;
   font-weight: 500;
-  margin-top: 2.5rem;
+  margin: 2.5rem 0 1.5rem 0;
 }
 
 .chat-no-user {
@@ -240,15 +241,15 @@ body {
   background: #f6f6f6;
 }
 
-.message-other .message-footer {
-  margin: 0 0 0.5rem 3.5rem;
-}
-
 .message-self .message-footer,
 .message-other .message-footer {
   font-size: 12px;
   color: #505050;
-  margin-bottom: 1rem;
+  margin: 0.5rem 0 1rem 0;
+}
+
+.message-other .message-footer {
+  margin: 0.5rem 0 0.5rem 3.5rem;
 }
 
 .messages > div:first-child {
@@ -260,7 +261,7 @@ body {
 }
 
 .chat-input {
-  width: 956px;
+  width: 980px;
   height: 90px;
   position: fixed;
   display: flex;
@@ -346,9 +347,6 @@ body {
 
 .image-wrapper {
   width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  margin-left: auto;
 }
 
 .downnload-image-btn {

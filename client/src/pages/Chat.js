@@ -26,9 +26,9 @@ const Chat = () => {
                 </div>
               );
             })}
-            <PotentialChats />
           </div>
         )}
+        <PotentialChats />
       </div>
       <ChatBox />
     </div>
