@@ -11,7 +11,8 @@ body {
 }
 
 .menu {
-  width: 1280px;
+  width: 100vw;
+  max-width: 1280px;
   height: 70px;
   display: flex;
   justify-content: flex-end;
@@ -30,7 +31,8 @@ body {
 }
 
 .container {
-  width: 1280px;
+  width: 100vw;
+  max-width: 1280px;
   margin: 0 auto;
 }
 
