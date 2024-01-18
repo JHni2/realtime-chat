@@ -72,24 +72,15 @@ const ChatBox = () => {
                 key={index}
                 className={message?.senderId === user?._id ? 'message-self' : 'message-other'}
               >
+                {array[index - 1] &&
+                message.senderId === array[index - 1].senderId &&
+                moment(message.createdAt).isSame(array[index - 1].createdAt, 'minute')
+                  ? null
+                  : message?.senderId !== user?._id && <Avatar userName={recipientUser?.name} size={60} />}
                 {message.contentType === 'text' ? (
-                  <>
-                    {array[index - 1] &&
-                    array[index + 1] &&
-                    message.senderId === array[index - 1].senderId &&
-                    message.senderId === array[index + 1].senderId &&
-                    moment(message.createdAt).isSame(array[index - 1].createdAt, 'minute')
-                      ? null
-                      : message?.senderId !== user?._id && <Avatar userName={recipientUser?.name} size={60} />}
-                    <div>
-                      <span className="message-text">{message.content}</span>
-                      {array[index + 1] &&
-                      message.senderId === array[index + 1].senderId &&
-                      moment(message.createdAt).isSame(array[index + 1].createdAt, 'minute') ? null : (
-                        <p className="message-footer">{moment(message.createdAt).calendar()}</p>
-                      )}
-                    </div>
-                  </>
+                  <div>
+                    <span className="message-text">{message.content}</span>
+                  </div>
                 ) : (
                   <div className={message?.senderId === user?._id ? 'message-self ' : 'message-other '}>
                     <ImageModal imageUrl={selectedImage} open={modalOpen} onClose={handleCloseModal} />
@@ -107,6 +98,11 @@ const ChatBox = () => {
                       </div>
                     </div>
                   </div>
+                )}
+                {array[index + 1] &&
+                message.senderId === array[index + 1].senderId &&
+                moment(message.createdAt).isSame(array[index + 1].createdAt, 'minute') ? null : (
+                  <p className="message-footer">{moment(message.createdAt).calendar()}</p>
                 )}
               </div>
             );

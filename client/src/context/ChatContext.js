@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useCallback } from 'react';
 import { baseUrl, getRequest, postRequest } from '../utils/services';
 import { io } from 'socket.io-client';
+import moment from 'moment';
 
 export const ChatContext = createContext();
 
@@ -49,7 +50,80 @@ export const ChatContextProvider = ({ children, user }) => {
     const recipientId = currentChat?.members?.find((id) => id !== user?._id);
 
     socket.emit('sendMessage', { ...newMessage, recipientId });
+    console.log('메시지 보내기', newMessage);
   }, [newMessage]);
+
+  // text 메시지 전송하기
+  const sendTextMessage = useCallback(async (textMessage, sender, currentChatId, setTextMessage) => {
+    if (!textMessage) return;
+
+    const response = await postRequest(
+      `${baseUrl}/messages`,
+      JSON.stringify({
+        chatId: currentChatId,
+        senderId: sender._id,
+        content: textMessage,
+        contentType: 'text',
+      })
+    );
+
+    /* 이전에는 response값을 넣었지만 response값을 사용하지 않고 
+    사용자가 입력한 텍스트를 바로 emit하기 위해 (socket.emit('sendMessage'))
+    사용하는 변수 (채팅방 Id, 보내는사람 Id, 콘텐츠(텍스트), 콘텐츠 타입(텍스트))
+    */
+    const typedMessage = {
+      chatId: currentChatId,
+      senderId: sender._id,
+      content: textMessage,
+      contentType: 'text',
+      createdAt: moment().format(),
+    };
+
+    if (response.error) {
+      return setSendTextMessageError(response);
+    }
+
+    setNewMessage(typedMessage);
+    setMessages((prev) => [...prev, typedMessage]);
+    setTextMessage('');
+  }, []);
+
+  // image 메시지 전송하기
+  const sendImageMessage = useCallback(async (imageMessage, sender, currentChatId, setImageMessage, imageName) => {
+    if (!imageMessage) return;
+
+    const response = await postRequest(
+      `${baseUrl}/messages`,
+      JSON.stringify({
+        chatId: currentChatId,
+        senderId: sender._id,
+        content: imageMessage,
+        contentType: 'image',
+        imageName: imageName,
+      })
+    );
+
+    /* 이전에는 response값을 넣었지만 response값을 사용하지 않고 
+    사용자가 입력한 이미지를 바로 emit하기 위해 (socket.emit('sendMessage'))
+    사용하는 변수 (채팅방 Id, 보내는사람 Id, 콘텐츠(이미지), 콘텐츠 타입(이미지), 이미지이름)
+    */
+    const typedMessage = {
+      chatId: currentChatId,
+      senderId: sender._id,
+      content: imageMessage,
+      contentType: 'image',
+      imageName: imageName,
+      createdAt: moment().format(),
+    };
+
+    if (response.error) {
+      return setSendImageMessageError(response);
+    }
+
+    setNewMessage(typedMessage);
+    setMessages((prev) => [...prev, typedMessage]);
+    setImageMessage('');
+  }, []);
 
   // 실시간으로 메시지 수신
   useEffect(() => {
@@ -57,8 +131,8 @@ export const ChatContextProvider = ({ children, user }) => {
 
     socket.on('getMessage', (res) => {
       if (currentChat?._id !== res.chatId) return;
-
       setMessages((prev) => [...prev, res]);
+      console.log('메시지 받기', res);
     });
 
     return () => {
@@ -82,7 +156,7 @@ export const ChatContextProvider = ({ children, user }) => {
 
         // 사용자의 채팅방 존재 유무 확인
         if (userChats) {
-          console.log(userChats);
+          // console.log(userChats);
           isChatCreated = userChats?.some((chat) => {
             return chat.members[0] === u._id || chat.members[1] === u._id;
           });
@@ -105,7 +179,7 @@ export const ChatContextProvider = ({ children, user }) => {
         setUserChatsError(null);
 
         const response = await getRequest(`${baseUrl}/chats/${user?._id}`);
-        console.log(response);
+        // console.log(response);
 
         setIsUserChatsLoading(false);
 
@@ -137,53 +211,6 @@ export const ChatContextProvider = ({ children, user }) => {
     };
     getMessages();
   }, [currentChat]);
-
-  // text 메시지 전송하기
-  const sendTextMessage = useCallback(async (textMessage, sender, currentChatId, setTextMessage) => {
-    if (!textMessage) return;
-
-    const response = await postRequest(
-      `${baseUrl}/messages`,
-      JSON.stringify({
-        chatId: currentChatId,
-        senderId: sender._id,
-        content: textMessage,
-        contentType: 'text',
-      })
-    );
-
-    if (response.error) {
-      return setSendTextMessageError(response);
-    }
-
-    setNewMessage(response);
-    setMessages((prev) => [...prev, response]);
-    setTextMessage('');
-  }, []);
-
-  // image 메시지 전송하기
-  const sendImageMessage = useCallback(async (imageMessage, sender, currentChatId, setImageMessage, imageName) => {
-    if (!imageMessage) return;
-
-    const response = await postRequest(
-      `${baseUrl}/messages`,
-      JSON.stringify({
-        chatId: currentChatId,
-        senderId: sender._id,
-        content: imageMessage,
-        contentType: 'image',
-        imageName: imageName,
-      })
-    );
-
-    if (response.error) {
-      return setSendImageMessageError(response);
-    }
-
-    setNewMessage(response);
-    setMessages((prev) => [...prev, response]);
-    setImageMessage('');
-  }, []);
 
   // 채팅방 선택하기
   const updateCurrentChat = useCallback((chat) => {
