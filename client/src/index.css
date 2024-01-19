@@ -316,6 +316,11 @@ body {
   width: 100%;
 }
 
+.sbumit-image-btn {
+  display: none;
+  visibility: hidden;
+}
+
 .delete-image-btn-bg,
 .upload-image-btn-bg {
   position: absolute;
@@ -366,6 +371,10 @@ body {
   margin: 1rem 0;
   border-radius: 20px;
   cursor: pointer;
+}
+
+.message-other .message-image {
+  margin-left: 3.5rem;
 }
 
 .ant-modal-close {

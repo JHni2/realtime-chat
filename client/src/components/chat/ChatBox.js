@@ -8,6 +8,7 @@ import { downloadImage } from '../../utils/imageDownload';
 import Avatar from './Avatar';
 import downlaod from '../../assets/download.svg';
 import ImageModal from '../../components/ImageModal';
+import { baseUrl } from '../../utils/services';
 
 const ChatBox = () => {
   const { user } = useContext(AuthContext);
@@ -17,6 +18,7 @@ const ChatBox = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
   const scroll = useRef();
+  const serverUrl = baseUrl.slice(0, -3);
 
   useEffect(() => {
     scroll.current?.scrollIntoView({ behavior: 'smooth' });
@@ -89,7 +91,7 @@ const ChatBox = () => {
                         <img
                           onClick={(e) => handleImageClick(e.target.src)}
                           className="message-image"
-                          src={message.content}
+                          src={serverUrl + message.content}
                           alt={message.imageName}
                         />
                         <span className="download-image-btn" onClick={() => downloadImage(message)}>

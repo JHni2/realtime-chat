@@ -44,3 +44,30 @@ export const getRequest = async (url) => {
 
   return data;
 };
+
+export const postImageRequest = async (url, formData) => {
+  const response = await fetch(url, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: formData,
+    mode: 'no-cors',
+  });
+
+  const data = await response.text();
+
+  if (!response.ok) {
+    let message;
+
+    if (data?.message) {
+      message = data.message;
+    } else {
+      message = data;
+    }
+
+    return { error: true, message };
+  }
+
+  return data;
+};

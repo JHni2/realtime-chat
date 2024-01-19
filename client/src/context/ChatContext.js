@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useCallback } from 'react';
-import { baseUrl, getRequest, postRequest } from '../utils/services';
+import { baseUrl, getRequest, postRequest, postImageRequest } from '../utils/services';
 import { io } from 'socket.io-client';
 import moment from 'moment';
 
@@ -89,41 +89,59 @@ export const ChatContextProvider = ({ children, user }) => {
   }, []);
 
   // image 메시지 전송하기
-  const sendImageMessage = useCallback(async (imageMessage, sender, currentChatId, setImageMessage, imageName) => {
-    if (!imageMessage) return;
+  const sendImageMessage = useCallback(
+    async (imageMessage, sender, currentChatId, setImageMessage, imageName, imageFile) => {
+      const tday = new Date().valueOf();
 
-    const response = await postRequest(
-      `${baseUrl}/messages`,
-      JSON.stringify({
-        chatId: currentChatId,
-        senderId: sender._id,
-        content: imageMessage,
-        contentType: 'image',
-        imageName: imageName,
-      })
-    );
+      if (!imageMessage) return;
 
-    /* 이전에는 response값을 넣었지만 response값을 사용하지 않고 
+      const response = await postRequest(
+        `${baseUrl}/messages`,
+        JSON.stringify({
+          chatId: currentChatId,
+          senderId: sender._id,
+          content: tday + imageName.replace(/\s/g, ''),
+          contentType: 'image',
+          imageName: imageName,
+        })
+      );
+
+      /* 이전에는 response값을 넣었지만 response값을 사용하지 않고 
     사용자가 입력한 이미지를 바로 emit하기 위해 (socket.emit('sendMessage'))
     사용하는 변수 (채팅방 Id, 보내는사람 Id, 콘텐츠(이미지), 콘텐츠 타입(이미지), 이미지이름)
     */
-    const typedMessage = {
-      chatId: currentChatId,
-      senderId: sender._id,
-      content: imageMessage,
-      contentType: 'image',
-      imageName: imageName,
-      createdAt: moment().format(),
-    };
+      const typedMessage = {
+        chatId: currentChatId,
+        senderId: sender._id,
+        content: tday + imageName.replace(/\s/g, ''),
+        contentType: 'image',
+        imageName: imageName,
+        createdAt: moment().format(),
+      };
 
-    if (response.error) {
-      return setSendImageMessageError(response);
-    }
+      if (response.error) {
+        return setSendImageMessageError(response);
+      }
 
-    setNewMessage(typedMessage);
-    setMessages((prev) => [...prev, typedMessage]);
-    setImageMessage('');
-  }, []);
+      // 이미지 업로드
+      const uploaImage = async () => {
+        const formData = new FormData();
+        formData.append('imageFile', imageFile, response.content);
+
+        const uploadResponse = await postImageRequest('http://localhost:5000/api/upload', formData);
+
+        if (uploadResponse.error) {
+          console.log('이미지를 업로드하는 데 실패했습니다.');
+        }
+      };
+
+      uploaImage();
+      setNewMessage(typedMessage);
+      setMessages((prev) => [...prev, typedMessage]);
+      setImageMessage('');
+    },
+    []
+  );
 
   // 실시간으로 메시지 수신
   useEffect(() => {
