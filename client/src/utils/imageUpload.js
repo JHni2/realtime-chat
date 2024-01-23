@@ -48,39 +48,37 @@ const ImageUpload = () => {
 
   return (
     <div>
-      <form action="http://localhost:5000/api/upload" method="POST" encType="multipart/form-data">
-        <input
-          ref={imageInputRef}
-          id="imageMessage"
-          accept=".jpg,.png"
-          type="file"
-          name="imageFile"
-          onChange={converToBase64}
-        />
-        <button className="sbumit-image-btn" type="submit">
-          Upload
-        </button>
-        <label htmlFor="imageMessage">
-          <img className="add-btn" src={addBtn} alt="add-btn" width={20} height={20} />
-        </label>
-        {imageMessage && (
-          <div className="image-preview-container">
-            <img className="image-preview" src={imageMessage} alt={imageMessageName} />
-            <div>
-              <div className="delete-image-btn-bg">
-                <span className="delete-image-btn" onClick={deleteImage}>
-                  ✖
-                </span>
-              </div>
-              <div className="upload-image-btn-bg">
-                <span className="upload-image-btn" onClick={uploadImage}>
-                  ✔
-                </span>
-              </div>
+      <input
+        ref={imageInputRef}
+        id="imageMessage"
+        accept=".jpg,.png"
+        type="file"
+        name="imageFile"
+        onChange={converToBase64}
+      />
+      <button className="sbumit-image-btn" type="submit">
+        Upload
+      </button>
+      <label htmlFor="imageMessage">
+        <img className="add-btn" src={addBtn} alt="add-btn" width={20} height={20} />
+      </label>
+      {imageMessage && (
+        <div className="image-preview-container">
+          <img className="image-preview" src={imageMessage} alt={imageMessageName} />
+          <div>
+            <div className="delete-image-btn-bg">
+              <span className="delete-image-btn" onClick={deleteImage}>
+                ✖
+              </span>
+            </div>
+            <div className="upload-image-btn-bg">
+              <span className="upload-image-btn" onClick={uploadImage}>
+                ✔
+              </span>
             </div>
           </div>
-        )}
-      </form>
+        </div>
+      )}
     </div>
   );
 };

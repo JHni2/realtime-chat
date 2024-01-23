@@ -16,7 +16,6 @@ export const ChatContextProvider = ({ children, user }) => {
   const [messagesError, setMessagesError] = useState(null);
   const [sendTextMessageError, setSendTextMessageError] = useState(null);
   const [sendImageMessageError, setSendImageMessageError] = useState(null);
-  const [newMessage, setNewMessage] = useState(null);
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
 
@@ -43,104 +42,111 @@ export const ChatContextProvider = ({ children, user }) => {
     };
   }, [socket]);
 
-  // 메시지 전송
-  useEffect(() => {
-    if (socket === null) return;
-
-    const recipientId = currentChat?.members?.find((id) => id !== user?._id);
-
-    socket.emit('sendMessage', { ...newMessage, recipientId });
-    console.log('메시지 보내기', newMessage);
-  }, [newMessage]);
-
   // text 메시지 전송하기
-  const sendTextMessage = useCallback(async (textMessage, sender, currentChatId, setTextMessage) => {
-    if (!textMessage) return;
+  const sendTextMessage = useCallback(
+    async (textMessage, sender, currentChatId, setTextMessage) => {
+      if (!textMessage) return;
 
-    const response = await postRequest(
-      `${baseUrl}/messages`,
-      JSON.stringify({
+      const newMessage = {
         chatId: currentChatId,
         senderId: sender._id,
         content: textMessage,
         contentType: 'text',
-      })
-    );
+        createdAt: moment().format(),
+      };
 
-    /* 이전에는 response값을 넣었지만 response값을 사용하지 않고 
-    사용자가 입력한 텍스트를 바로 emit하기 위해 (socket.emit('sendMessage'))
-    사용하는 변수 (채팅방 Id, 보내는사람 Id, 콘텐츠(텍스트), 콘텐츠 타입(텍스트))
-    */
-    const typedMessage = {
-      chatId: currentChatId,
-      senderId: sender._id,
-      content: textMessage,
-      contentType: 'text',
-      createdAt: moment().format(),
-    };
+      if (socket === null) return;
+      const recipientId = currentChat?.members?.find((id) => id !== user?._id);
 
-    if (response.error) {
-      return setSendTextMessageError(response);
-    }
+      const postTextMessage = async () => {
+        const response = await postRequest(
+          `${baseUrl}/messages`,
+          JSON.stringify({
+            chatId: currentChatId,
+            senderId: sender._id,
+            content: textMessage,
+            contentType: 'text',
+          })
+        );
+        if (response.error) {
+          return setSendTextMessageError(response);
+        }
 
-    setNewMessage(typedMessage);
-    setMessages((prev) => [...prev, typedMessage]);
-    setTextMessage('');
-  }, []);
+        socket.emit('sendMessage', { ...newMessage, recipientId });
+        setMessages((prev) => [...prev, newMessage]);
+        setTextMessage('');
+      };
+
+      try {
+        await postTextMessage();
+      } catch (error) {
+        console.error('텍스트를 전송하는 데 실패했습니다.', error);
+      }
+    },
+    [socket, messages]
+  );
 
   // image 메시지 전송하기
   const sendImageMessage = useCallback(
     async (imageMessage, sender, currentChatId, setImageMessage, imageName, imageFile) => {
-      const tday = new Date().valueOf();
-
       if (!imageMessage) return;
 
-      const response = await postRequest(
-        `${baseUrl}/messages`,
-        JSON.stringify({
-          chatId: currentChatId,
-          senderId: sender._id,
-          content: tday + imageName.replace(/\s/g, ''),
-          contentType: 'image',
-          imageName: imageName,
-        })
-      );
+      const tday = new Date().valueOf();
+      const content = tday + imageName.replace(/\s/g, '');
 
-      /* 이전에는 response값을 넣었지만 response값을 사용하지 않고 
-    사용자가 입력한 이미지를 바로 emit하기 위해 (socket.emit('sendMessage'))
-    사용하는 변수 (채팅방 Id, 보내는사람 Id, 콘텐츠(이미지), 콘텐츠 타입(이미지), 이미지이름)
-    */
-      const typedMessage = {
+      const newMessage = {
         chatId: currentChatId,
         senderId: sender._id,
-        content: tday + imageName.replace(/\s/g, ''),
+        content: content,
         contentType: 'image',
         imageName: imageName,
         createdAt: moment().format(),
       };
 
-      if (response.error) {
-        return setSendImageMessageError(response);
-      }
+      if (socket === null) return;
+      const recipientId = currentChat?.members?.find((id) => id !== user?._id);
 
       // 이미지 업로드
-      const uploaImage = async () => {
+      const uploadImage = async () => {
         const formData = new FormData();
-        formData.append('imageFile', imageFile, response.content);
+        formData.append('imageFile', imageFile, newMessage.content);
 
         const uploadResponse = await postImageRequest('http://localhost:5000/api/upload', formData);
 
         if (uploadResponse.error) {
-          console.log('이미지를 업로드하는 데 실패했습니다.');
+          return console.log('이미지를 업로드하는 데 실패했습니다.', uploadResponse);
         }
       };
 
-      uploaImage();
-      setNewMessage(typedMessage);
-      setMessages((prev) => [...prev, typedMessage]);
-      setImageMessage('');
+      const postImageMessage = async () => {
+        const response = await postRequest(
+          `${baseUrl}/messages`,
+          JSON.stringify({
+            chatId: currentChatId,
+            senderId: sender._id,
+            content: content,
+            contentType: 'image',
+            imageName: imageName,
+          })
+        );
+
+        if (response.error) {
+          return setSendImageMessageError(response);
+        }
+
+        socket.emit('sendMessage', { ...newMessage, recipientId });
+        setMessages((prev) => [...prev, newMessage]);
+        setImageMessage('');
+      };
+
+      try {
+        await uploadImage();
+        await postImageMessage();
+      } catch (error) {
+        console.error('이미지를 전송하는 데 실패했습니다.', error);
+      }
     },
-    []
+    [socket, messages]
   );
 
   // 실시간으로 메시지 수신
@@ -156,7 +162,7 @@ export const ChatContextProvider = ({ children, user }) => {
     return () => {
       socket.off('getMessage');
     };
-  }, [socket, currentChat]);
+  }, [socket, currentChat, messages]);
 
   // 잠재적 채팅 상대 불러오기
   useEffect(() => {
